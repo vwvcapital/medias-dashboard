@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { TrendingUp, Search, Download, Printer, X } from "lucide-react";
 import { ProcessedFleetData } from "@/types/fleet";
@@ -22,10 +22,18 @@ import html2canvas from "html2canvas";
 
 interface VehiclePerformanceChartProps {
   data: ProcessedFleetData[];
+  initialVehicle?: string | null;
 }
 
-export function VehiclePerformanceChart({ data }: VehiclePerformanceChartProps) {
-  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+export function VehiclePerformanceChart({ data, initialVehicle }: VehiclePerformanceChartProps) {
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(initialVehicle ?? null);
+  
+  // Sync with initialVehicle when it changes
+  useEffect(() => {
+    if (initialVehicle !== undefined) {
+      setSelectedVehicle(initialVehicle);
+    }
+  }, [initialVehicle]);
   const [open, setOpen] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 

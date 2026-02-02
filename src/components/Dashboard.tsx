@@ -143,38 +143,38 @@ export function Dashboard({
           </div>
         )}
 
-        {/* Attention Report */}
-        {visibility.attentionReport && (
+        {/* Attention Report - hidden when vehicle selected */}
+        {visibility.attentionReport && !selectedVehicle && (
           <div className="mb-6">
             <AttentionReport data={attentionReport} />
           </div>
         )}
 
-        {/* Analysis Cards Row */}
-        {(visibility.loadEfficiency || visibility.anomalyDetector) && (
+        {/* Analysis Cards Row - hidden when vehicle selected */}
+        {(visibility.loadEfficiency || visibility.anomalyDetector) && !selectedVehicle && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {visibility.loadEfficiency && <LoadEfficiencyCard data={loadEfficiency} />}
             {visibility.anomalyDetector && <AnomalyDetector data={anomalies} />}
           </div>
         )}
 
-        {/* Vehicle Comparator */}
-        {visibility.vehicleComparator && (
+        {/* Vehicle Comparator - hidden when vehicle selected */}
+        {visibility.vehicleComparator && !selectedVehicle && (
           <div className="mb-6">
             <VehicleComparator data={activeData} />
           </div>
         )}
 
-        {/* Benchmark and Trends Row */}
-        {(visibility.modelBenchmark || visibility.trendIndicator) && (
+        {/* Benchmark and Trends Row - hidden when vehicle selected */}
+        {(visibility.modelBenchmark || visibility.trendIndicator) && !selectedVehicle && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {visibility.modelBenchmark && <ModelBenchmarkCard data={modelBenchmark} />}
             {visibility.trendIndicator && <TrendIndicator data={trends} />}
           </div>
         )}
 
-        {/* Group Performance */}
-        {visibility.groupChart && (
+        {/* Group Performance - hidden when vehicle selected */}
+        {visibility.groupChart && !selectedVehicle && (
           <div className="mb-6">
             <GroupChart data={activeData} />
           </div>
@@ -190,19 +190,19 @@ export function Dashboard({
         {/* Vehicle Performance Chart */}
         {visibility.vehiclePerformance && (
           <div className="mb-6">
-            <VehiclePerformanceChart data={activeData} />
+            <VehiclePerformanceChart data={activeData} initialVehicle={selectedVehicle} />
           </div>
         )}
 
-        {/* Vehicle Ranking */}
-        {visibility.vehicleRanking && (
+        {/* Vehicle Ranking - hidden when vehicle selected */}
+        {visibility.vehicleRanking && !selectedVehicle && (
           <div className="mb-6">
             <VehicleRanking vehicles={vehicleRanking} />
           </div>
         )}
 
-        {/* Model Ranking */}
-        {visibility.modelRanking && (
+        {/* Model Ranking - hidden when vehicle selected */}
+        {visibility.modelRanking && !selectedVehicle && (
           <div className="mb-6">
             <ModelRanking models={modelRanking} />
           </div>
