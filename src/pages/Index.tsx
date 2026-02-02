@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Dashboard } from "@/components/Dashboard";
-import { FleetData, ProcessedFleetData } from "@/types/fleet";
+import { ProcessedFleetData } from "@/types/fleet";
 import { parseFleetData } from "@/utils/fleetUtils";
 import { fetchGoogleSheetsData } from "@/utils/dataLoader";
 import { Loader2, RefreshCw } from "lucide-react";
@@ -28,15 +28,6 @@ const Index = () => {
   useEffect(() => {
     loadData();
   }, []);
-
-  const handleDataLoaded = (rawData: FleetData[]) => {
-    const processed = parseFleetData(rawData);
-    setData(processed);
-  };
-
-  const handleReset = () => {
-    loadData();
-  };
 
   if (isLoading) {
     return (
@@ -75,7 +66,7 @@ const Index = () => {
     return null;
   }
 
-  return <Dashboard data={data} onReset={handleReset} onDataUpdate={handleDataLoaded} />;
+  return <Dashboard data={data} />;
 };
 
 export default Index;

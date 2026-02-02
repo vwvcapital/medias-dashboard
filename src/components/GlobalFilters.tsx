@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Calendar, Search, X, Filter, Download, FileSpreadsheet } from "lucide-react";
+import { Calendar, Search, X, Filter } from "lucide-react";
 import { ProcessedFleetData } from "@/types/fleet";
 import { getUniqueVehicles } from "@/utils/analysisUtils";
 import {
@@ -16,7 +16,6 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import * as XLSX from "xlsx";
 
 interface GlobalFiltersProps {
   data: ProcessedFleetData[];
@@ -114,25 +113,6 @@ export function GlobalFilters({
     setPeriodPreset("");
     onVehicleSelect(null);
     onFilterChange(data);
-  };
-
-  const exportToExcel = () => {
-    const exportData = data.map((item) => ({
-      Mês: item.Mês,
-      Veículo: item.Veículo,
-      Marca: item.Marca,
-      Modelo: item.Modelo,
-      Grupo: item.Grupo,
-      "KM Rodado": item["KM Rodado"],
-      "KM Rodado Carregado": item["KM Rodado Carregado"],
-      Média: item.Média,
-      "Média Carregado": item["Média Carregado"],
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(exportData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Dados");
-    XLSX.writeFile(wb, `frota_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
   const hasFilters = startMonth || endMonth || selectedVehicle;
@@ -256,15 +236,6 @@ export function GlobalFilters({
 
         {/* Spacer */}
         <div className="flex-1" />
-
-        {/* Export Button */}
-        <button
-          onClick={exportToExcel}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
-        >
-          <FileSpreadsheet className="w-4 h-4" />
-          <span className="text-sm font-medium hidden sm:inline">Exportar Excel</span>
-        </button>
       </div>
 
       {/* Active filters summary */}

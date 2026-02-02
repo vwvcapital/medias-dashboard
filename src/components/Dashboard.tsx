@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-import { Gauge, Route, Truck, RefreshCw, Cloud, Loader2 } from "lucide-react";
-import { ProcessedFleetData, FleetData } from "@/types/fleet";
+import { Gauge, Route, Truck } from "lucide-react";
+import { ProcessedFleetData } from "@/types/fleet";
 import { calculateFleetStats, getVehicleRanking, getGroupStats, getMonthlyTrend, getModelStats, formatNumber, formatKm } from "@/utils/fleetUtils";
 import { calculateLoadEfficiency, detectAnomalies, calculateModelBenchmark, calculateTrends, generateAttentionReport } from "@/utils/analysisUtils";
-import { fetchGoogleSheetsData } from "@/utils/dataLoader";
 import { StatCard } from "./StatCard";
 import { VehicleRanking } from "./VehicleRanking";
 import { ModelRanking } from "./ModelRanking";
@@ -23,16 +22,11 @@ import { AttentionReport } from "./AttentionReport";
 
 interface DashboardProps {
   data: ProcessedFleetData[];
-  onReset: () => void;
-  onDataUpdate: (data: FleetData[]) => void;
 }
 
 export function Dashboard({
   data,
-  onReset,
-  onDataUpdate
 }: DashboardProps) {
-  const [isSyncing, setIsSyncing] = useState(false);
   const [filteredData, setFilteredData] = useState<ProcessedFleetData[]>(data);
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
   const { visibility, toggleSection, resetToDefault } = useDashboardVisibility();
@@ -79,31 +73,6 @@ export function Dashboard({
                 onToggle={toggleSection}
                 onReset={resetToDefault}
               />
-              <button
-                onClick={async () => {
-                  setIsSyncing(true);
-                  try {
-                    const newData = await fetchGoogleSheetsData();
-                    onDataUpdate(newData);
-                  } catch {
-                    alert("Erro ao sincronizar");
-                  } finally {
-                    setIsSyncing(false);
-                  }
-                }}
-                disabled={isSyncing}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-xl font-medium transition-colors hover:bg-accent/90 disabled:opacity-50"
-              >
-                {isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Cloud className="w-4 h-4" />}
-                Atualizar
-              </button>
-              <button
-                onClick={onReset}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-xl font-medium transition-colors hover:bg-secondary/80"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Novo Arquivo
-            </button>
           </div>
         </div>
 
