@@ -68,7 +68,7 @@ export function Dashboard({
           <div>
             <h1 className="text-3xl md:text-4xl font-bold gradient-text">Comelli Transportes</h1>
             <p className="text-muted-foreground mt-1">
-              Frota de Carga Viva • {stats.totalVeiculos} veículos • {activeData.length} registros
+              Dashboard de Médias • {stats.totalVeiculos} veículos • {activeData.length} registros
             </p>
           </div>
           <div className="flex gap-2 flex-wrap">
