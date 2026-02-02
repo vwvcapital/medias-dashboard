@@ -28,7 +28,6 @@ export function Dashboard({
   data,
 }: DashboardProps) {
   const [filteredData, setFilteredData] = useState<ProcessedFleetData[]>(data);
-  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
   const { visibility, toggleSection, resetToDefault } = useDashboardVisibility();
   
   // Use filtered data for all calculations
@@ -81,8 +80,6 @@ export function Dashboard({
           <GlobalFilters
             data={data}
             onFilterChange={handleFilterChange}
-            onVehicleSelect={setSelectedVehicle}
-            selectedVehicle={selectedVehicle}
           />
         )}
         </div>
@@ -112,38 +109,38 @@ export function Dashboard({
           </div>
         )}
 
-        {/* Attention Report - hidden when vehicle selected */}
-        {visibility.attentionReport && !selectedVehicle && (
+        {/* Attention Report */}
+        {visibility.attentionReport && (
           <div className="mb-6">
             <AttentionReport data={attentionReport} />
           </div>
         )}
 
-        {/* Analysis Cards Row - hidden when vehicle selected */}
-        {(visibility.loadEfficiency || visibility.anomalyDetector) && !selectedVehicle && (
+        {/* Analysis Cards Row */}
+        {(visibility.loadEfficiency || visibility.anomalyDetector) && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {visibility.loadEfficiency && <LoadEfficiencyCard data={loadEfficiency} />}
             {visibility.anomalyDetector && <AnomalyDetector data={anomalies} />}
           </div>
         )}
 
-        {/* Vehicle Comparator - hidden when vehicle selected */}
-        {visibility.vehicleComparator && !selectedVehicle && (
+        {/* Vehicle Comparator */}
+        {visibility.vehicleComparator && (
           <div className="mb-6">
             <VehicleComparator data={activeData} />
           </div>
         )}
 
-        {/* Benchmark and Trends Row - hidden when vehicle selected */}
-        {(visibility.modelBenchmark || visibility.trendIndicator) && !selectedVehicle && (
+        {/* Benchmark and Trends Row */}
+        {(visibility.modelBenchmark || visibility.trendIndicator) && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {visibility.modelBenchmark && <ModelBenchmarkCard data={modelBenchmark} />}
             {visibility.trendIndicator && <TrendIndicator data={trends} />}
           </div>
         )}
 
-        {/* Group Performance - hidden when vehicle selected */}
-        {visibility.groupChart && !selectedVehicle && (
+        {/* Group Performance */}
+        {visibility.groupChart && (
           <div className="mb-6">
             <GroupChart data={activeData} />
           </div>
@@ -159,19 +156,19 @@ export function Dashboard({
         {/* Vehicle Performance Chart */}
         {visibility.vehiclePerformance && (
           <div className="mb-6">
-            <VehiclePerformanceChart data={activeData} initialVehicle={selectedVehicle} />
+            <VehiclePerformanceChart data={activeData} />
           </div>
         )}
 
-        {/* Vehicle Ranking - hidden when vehicle selected */}
-        {visibility.vehicleRanking && !selectedVehicle && (
+        {/* Vehicle Ranking */}
+        {visibility.vehicleRanking && (
           <div className="mb-6">
             <VehicleRanking vehicles={vehicleRanking} />
           </div>
         )}
 
-        {/* Model Ranking - hidden when vehicle selected */}
-        {visibility.modelRanking && !selectedVehicle && (
+        {/* Model Ranking */}
+        {visibility.modelRanking && (
           <div className="mb-6">
             <ModelRanking models={modelRanking} />
           </div>
