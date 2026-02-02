@@ -61,43 +61,45 @@ export function Dashboard({
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 animate-fade-in">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold gradient-text">Comelli Transportes</h1>
-            <p className="text-muted-foreground mt-1">
-              Dashboard de Médias • {stats.totalVeiculos} veículos • {activeData.length} registros
-            </p>
-          </div>
-          <div className="flex gap-2 flex-wrap">
-            <DashboardSettings
-              visibility={visibility}
-              onToggle={toggleSection}
-              onReset={resetToDefault}
-            />
-            <button
-              onClick={async () => {
-                setIsSyncing(true);
-                try {
-                  const newData = await fetchGoogleSheetsData();
-                  onDataUpdate(newData);
-                } catch {
-                  alert("Erro ao sincronizar");
-                } finally {
-                  setIsSyncing(false);
-                }
-              }}
-              disabled={isSyncing}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-xl font-medium transition-colors hover:bg-accent/90 disabled:opacity-50"
-            >
-              {isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Cloud className="w-4 h-4" />}
-              Atualizar
-            </button>
-            <button
-              onClick={onReset}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-xl font-medium transition-colors hover:bg-secondary/80"
+    <div className="min-h-screen">
+      {/* Sticky Header - Desktop only */}
+      <div className="md:sticky md:top-0 md:z-50 md:bg-background/95 md:backdrop-blur-sm md:border-b md:border-border">
+        <div className="max-w-7xl mx-auto p-4 md:p-6 lg:px-8 lg:py-4">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold gradient-text">Comelli Transportes</h1>
+              <p className="text-muted-foreground mt-1">
+                Dashboard de Médias • {stats.totalVeiculos} veículos • {activeData.length} registros
+              </p>
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <DashboardSettings
+                visibility={visibility}
+                onToggle={toggleSection}
+                onReset={resetToDefault}
+              />
+              <button
+                onClick={async () => {
+                  setIsSyncing(true);
+                  try {
+                    const newData = await fetchGoogleSheetsData();
+                    onDataUpdate(newData);
+                  } catch {
+                    alert("Erro ao sincronizar");
+                  } finally {
+                    setIsSyncing(false);
+                  }
+                }}
+                disabled={isSyncing}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-xl font-medium transition-colors hover:bg-accent/90 disabled:opacity-50"
+              >
+                {isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Cloud className="w-4 h-4" />}
+                Atualizar
+              </button>
+              <button
+                onClick={onReset}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-xl font-medium transition-colors hover:bg-secondary/80"
             >
               <RefreshCw className="w-4 h-4" />
               Novo Arquivo
@@ -105,7 +107,7 @@ export function Dashboard({
           </div>
         </div>
 
-        {/* Global Filters */}
+        {/* Global Filters - inside sticky header */}
         {visibility.globalFilters && (
           <GlobalFilters
             data={data}
@@ -114,6 +116,12 @@ export function Dashboard({
             selectedVehicle={selectedVehicle}
           />
         )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="p-4 md:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto">
 
         {/* Main Metric - Média Carregado */}
         {visibility.mainStats && (
@@ -202,6 +210,7 @@ export function Dashboard({
 
         {/* Data Table */}
         {visibility.dataTable && <DataTable data={activeData} />}
+        </div>
       </div>
     </div>
   );
