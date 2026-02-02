@@ -184,11 +184,6 @@ export function GlobalFilters({
               Até: {endMonth}
             </span>
           )}
-          {selectedVehicle && (
-            <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs">
-              Veículo: {selectedVehicle}
-            </span>
-          )}
         </div>
       )}
     </div>
