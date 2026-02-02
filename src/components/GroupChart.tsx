@@ -33,11 +33,24 @@ const FALLBACK_COLORS = [
 
 const MAX_INITIAL_GROUPS = 5;
 
+// Grupos que devem estar ativos por padrão
+const DEFAULT_ACTIVE_GROUPS = [
+  "BI CAÇAMBA",
+  "RODO CAÇAMBA",
+  "PINTINHO",
+  "CARRETAS SUINOS",
+  "RODO GRANELEIRO",
+];
+
 export function GroupChart({ data }: GroupChartProps) {
   const groups = useMemo(() => [...new Set(data.map((d) => d.Grupo))].sort(), [data]);
   
-  // Initialize with only the first 5 groups active
+  // Initialize with specific default groups, or first 5 if defaults not found
   const [activeGroups, setActiveGroups] = useState<Set<string>>(() => {
+    const defaultsInData = DEFAULT_ACTIVE_GROUPS.filter(g => groups.includes(g));
+    if (defaultsInData.length > 0) {
+      return new Set(defaultsInData);
+    }
     return new Set(groups.slice(0, MAX_INITIAL_GROUPS));
   });
 
@@ -87,7 +100,7 @@ export function GroupChart({ data }: GroupChartProps) {
     if (!payload) return null;
 
     return (
-      <div className="flex flex-wrap justify-center gap-2 mt-4">
+      <div className="flex flex-wrap justify-center gap-1 sm:gap-2 mt-4 max-h-24 sm:max-h-32 overflow-y-auto px-2">
         {payload.map((entry, index) => {
           const isActive = activeGroups.has(entry.dataKey);
           return (
@@ -95,7 +108,7 @@ export function GroupChart({ data }: GroupChartProps) {
               key={`legend-${index}`}
               onClick={() => handleLegendClick(entry.dataKey)}
               className={`
-                flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all
+                flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium transition-all
                 ${isActive 
                   ? 'opacity-100' 
                   : 'opacity-40 hover:opacity-60'
@@ -108,10 +121,10 @@ export function GroupChart({ data }: GroupChartProps) {
               }}
             >
               <span
-                className="w-2.5 h-2.5 rounded-full"
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
                 style={{ backgroundColor: entry.color }}
               />
-              {entry.value}
+              <span className="truncate max-w-[60px] sm:max-w-none">{entry.value}</span>
             </button>
           );
         })}
